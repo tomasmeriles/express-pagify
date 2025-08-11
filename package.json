@@ -1,8 +1,9 @@
 {
   "name": "express-pagify",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "description": "A simple and flexible Express middleware for API pagination",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -31,6 +32,7 @@
     "express": "^5.1.0"
   },
   "devDependencies": {
+    "@types/express": "^5.0.3",
     "@types/node": "^24.2.1"
   }
 }
