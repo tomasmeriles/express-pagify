@@ -42,6 +42,7 @@ export function pagifyOffsetBased(config?: Partial<PagifyOffsetBasedConfig>) {
     pageSizePropertyName: DEFAULTS.PAGE_SIZE_PROPERTY_NAME,
     invalidValuesMessage: DEFAULTS.INVALID_VALUES_MESSAGE,
     validatorFunction: defaultValidatorFunction,
+    // TODO: Change this values to false when releasing 1.0
     fallBackValues: {
       defaultPageValue: 1,
       defaultPageSizeValue: 10,
@@ -52,6 +53,7 @@ export function pagifyOffsetBased(config?: Partial<PagifyOffsetBasedConfig>) {
   // If pagination is disabled, return a middleware that just calls next().
   if (fullConfig.disablePagination) {
     return function (_req: Request, _res: Response, next: NextFunction) {
+      // TODO: Return this value when releasing 1.0
       next();
     };
   }
@@ -117,6 +119,7 @@ export function pagifyOffsetBased(config?: Partial<PagifyOffsetBasedConfig>) {
     };
 
     // Continue to the next middleware or route handler.
+    // TODO: Return this value when releasing 1.0
     next();
   };
 }
