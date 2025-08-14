@@ -20,6 +20,11 @@ import { DEFAULTS } from '../constants/defaults.js';
  *
  * @returns Express middleware function.
  *
+ * @throws {InvalidPaginationValuesError}
+ * Thrown if:
+ * - Validator function returns false,
+ * - No fallback values are configured, and
+ * - `fallBackValues` is `false`.
  * @example
  * // Basic usage
  * app.use(pagify());
@@ -52,6 +57,7 @@ export function pagifyOffsetBased(config?: Partial<PagifyOffsetBasedConfig>) {
 
   // If pagination is disabled, return a middleware that just calls next().
   if (fullConfig.disablePagination) {
+    // TODO: Make this a utils function
     return function (_req: Request, _res: Response, next: NextFunction) {
       // TODO: Return this value when releasing 1.0
       next();
