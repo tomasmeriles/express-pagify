@@ -59,6 +59,7 @@ export function pagifyOffsetBased(config?: Partial<PagifyOffsetBasedConfig>) {
   if (fullConfig.disablePagination) {
     // TODO: Make this a utils function
     return function (_req: Request, _res: Response, next: NextFunction) {
+      //TODO: Set req.pagination.page and pagesize = undefined when releasing 1.0
       // TODO: Return this value when releasing 1.0
       next();
     };

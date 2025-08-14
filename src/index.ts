@@ -26,10 +26,13 @@ export type {
 // Pagination Response Utilities
 // ----------------------
 
-// Export utility function to format and send paginated API responses
 export { formatAndSendPaginated } from './responses/formatAndSendPaginated.js';
-// Export the type for the options object accepted by formatAndSendPaginated
 export type { FormatAndSendOptions } from './types/FormatAndSendOptions.js';
+export type { PaginatedResponse } from './types/PaginatedResponse.js';
+
+export { cursorBasedResponse } from './responses/cursorBasedResponse.js';
+export type { CursorBasedResponseOptions } from './types/CursorBasedResponseOptions.js';
+export type { CursorBasedResponse } from './types/CursorBasedResponse.js';
 
 // ----------------------
 // Cursor-Based Pagination

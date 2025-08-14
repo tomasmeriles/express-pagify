@@ -58,6 +58,7 @@ export function pagifyCursorBased<T extends Record<string, any>>(
 
   // If pagination is disabled, return a middleware that just calls next().
   if (fullConfig.disablePagination) {
+    //TODO: Set req.pagination.cursor = undefined when releasing 1.0
     return function (_req: Request, _res: Response, next: NextFunction) {
       return next();
     };

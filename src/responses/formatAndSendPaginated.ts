@@ -37,5 +37,6 @@ export function formatAndSendPaginated<T>({
     ...extra,
   };
 
+  //TODO: Change this to return response when releasing 1.0
   return res.status(status).send(response);
 }
