@@ -2,6 +2,7 @@ import type { PagifyCursorBasedConfig } from '../types/PagifyCursorBasedConfig.j
 import type { Request, Response, NextFunction } from 'express';
 import { isString } from '../utils/typeguards/isString.js';
 import { InvalidPaginationValuesError } from '../errors/InvalidPaginationValuesError.js';
+import { DEFAULTS } from '../constants/defaults.js';
 
 /**
  * Creates an Express middleware for handling **cursor-based pagination**.
@@ -43,16 +44,15 @@ export function pagifyCursorBased<T extends Record<string, any>>(
   config: Partial<PagifyCursorBasedConfig<T>>
 ) {
   // Merge provided config with defaults, ensuring all fields are present
-  // TODO: Move this to default values object in constants
   const fullConfig: Required<PagifyCursorBasedConfig<T>> = {
     disablePagination: false,
     supportedHttpMethods: ['GET'],
-    cursorParamName: 'c',
+    cursorParamName: DEFAULTS.CURSOR_PARAM_NAME,
     lastPropertyName: 'last' as keyof T,
     limitPropertyName: 'limit' as keyof T,
     fallBackValues: false,
     validatorFunction: () => true,
-    invalidValuesMessage: 'One or more required pagination values are missing',
+    invalidValuesMessage: DEFAULTS.INVALID_VALUES_MESSAGE,
     ...config,
   };
 
