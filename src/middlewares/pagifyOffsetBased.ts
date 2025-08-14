@@ -98,6 +98,7 @@ export function pagifyOffsetBased(config?: Partial<PagifyOffsetBasedConfig>) {
         : false;
 
     // If invalid values and no fallbacks configured, throw an error.
+    let fallbackValues = false;
     if (!validValues) {
       if (
         !fullConfig.fallBackValues ||
@@ -110,6 +111,7 @@ export function pagifyOffsetBased(config?: Partial<PagifyOffsetBasedConfig>) {
       // Use fallback pagination values if available.
       parsedPage = fullConfig.fallBackValues.defaultPageValue;
       parsedPageSize = fullConfig.fallBackValues.defaultPageSizeValue;
+      fallbackValues = true;
     }
 
     // Sanity check: pagination values should be defined here.
@@ -123,6 +125,7 @@ export function pagifyOffsetBased(config?: Partial<PagifyOffsetBasedConfig>) {
       pageSize: parsedPageSize,
       skip: (parsedPage - 1) * parsedPageSize, // Calculate offset for DB queries.
       take: parsedPageSize, // Number of items to fetch.
+      fallbackValues,
     };
 
     // Continue to the next middleware or route handler.

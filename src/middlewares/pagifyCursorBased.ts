@@ -84,6 +84,7 @@ export function pagifyCursorBased<T extends Record<string, any>>(
     const isValid = fullConfig.validatorFunction(decodedCursor);
 
     // If cursor is invalid, check for fallback values
+    let fallbackValues = false;
     if (!isValid) {
       if (
         !fullConfig.fallBackValues ||
@@ -98,10 +99,15 @@ export function pagifyCursorBased<T extends Record<string, any>>(
         [fullConfig.lastPropertyName]: fullConfig.fallBackValues.defaultLast,
         [fullConfig.limitPropertyName]: fullConfig.fallBackValues.defaultLimit,
       } as T;
+      fallbackValues = true;
     }
 
     // Attach the parsed or fallback cursor to the request
-    req.pagination = { ...req.pagination, cursor: decodedCursor };
+    req.pagination = {
+      ...req.pagination,
+      cursor: decodedCursor,
+      fallbackValues,
+    };
 
     // Continue to next middleware/handler
     return next();

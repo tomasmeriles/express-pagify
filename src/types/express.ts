@@ -7,6 +7,7 @@ declare global {
         skip?: number;
         take?: number;
         cursor?: unknown;
+        fallbackValues: boolean;
       };
     }
   }
