@@ -1,8 +1,9 @@
-import type { PagifyCursorBasedConfig } from '../types/PagifyCursorBasedConfig.js';
+import type { CursorBasedConfig } from '../types/cursor-based/CursorBasedConfig.js';
 import type { Request, Response, NextFunction } from 'express';
 import { isString } from '../utils/typeguards/isString.js';
 import { InvalidPaginationValuesError } from '../errors/InvalidPaginationValuesError.js';
 import { DEFAULTS } from '../constants/defaults.js';
+import type { HttpMethod } from '../types/common/BasicMiddlewareConfig.js';
 
 /**
  * Creates an Express middleware for handling **cursor-based pagination**.
@@ -41,10 +42,10 @@ import { DEFAULTS } from '../constants/defaults.js';
  * ```
  */
 export function pagifyCursorBased<T extends Record<string, any>>(
-  config: Partial<PagifyCursorBasedConfig<T>>
+  config: Partial<CursorBasedConfig<T>>
 ) {
   // Merge provided config with defaults, ensuring all fields are present
-  const fullConfig: Required<PagifyCursorBasedConfig<T>> = {
+  const fullConfig: Required<CursorBasedConfig<T>> = {
     disablePagination: false,
     supportedHttpMethods: ['GET'],
     cursorParamName: DEFAULTS.CURSOR_PARAM_NAME,
@@ -56,10 +57,14 @@ export function pagifyCursorBased<T extends Record<string, any>>(
     ...config,
   };
 
-  // If pagination is disabled, return a middleware that just calls next().
+  // If pagination is disabled, return a middleware that just calls next() and sets pagination values to undefined.
   if (fullConfig.disablePagination) {
-    //TODO: Set req.pagination.cursor = undefined when releasing 1.0
-    return function (_req: Request, _res: Response, next: NextFunction) {
+    return function (req: Request, _res: Response, next: NextFunction) {
+      if (req.pagination) {
+        req.pagination.cursor = undefined;
+        req.pagination.fallbackValues = false;
+      }
+
       return next();
     };
   }
@@ -67,7 +72,7 @@ export function pagifyCursorBased<T extends Record<string, any>>(
   // Actual middleware function to handle pagination.
   return function (req: Request, res: Response, next: NextFunction) {
     // Only process pagination if the HTTP method is in the supported list.
-    if (!fullConfig.supportedHttpMethods.includes(req.method)) {
+    if (!fullConfig.supportedHttpMethods.includes(req.method as HttpMethod)) {
       return next();
     }
 

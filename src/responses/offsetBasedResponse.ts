@@ -1,4 +1,4 @@
-import type { FormatAndSendOptions } from '../types/FormatAndSendOptions.js';
+import type { OffsetBasedResponseOptions } from '../types/offset-based/OffsetBasedResponseOptions.js';
 
 /**
  * Formats and sends a standardized paginated response for REST APIs using Express.
@@ -11,7 +11,7 @@ import type { FormatAndSendOptions } from '../types/FormatAndSendOptions.js';
  *
  * @returns The Express response after sending the paginated data.
  */
-export function formatAndSendPaginated<T>({
+export function offsetBasedResponse<T>({
   res,
   data,
   skip,
@@ -19,7 +19,7 @@ export function formatAndSendPaginated<T>({
   total,
   status = 200,
   extra = {},
-}: FormatAndSendOptions<T>) {
+}: OffsetBasedResponseOptions<T>) {
   const page = Math.floor(skip / take) + 1;
   const totalPages = Math.ceil(total / take);
 
@@ -37,6 +37,7 @@ export function formatAndSendPaginated<T>({
     ...extra,
   };
 
-  //TODO: Change this to return response when releasing 1.0
-  return res.status(status).send(response);
+  res.status(status).send(response);
+
+  return response;
 }

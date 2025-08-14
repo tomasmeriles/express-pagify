@@ -1,4 +1,4 @@
-import type { CursorBasedResponseOptions } from '../types/CursorBasedResponseOptions.js';
+import type { CursorBasedResponseOptions } from '../types/cursor-based/CursorBasedResponseOptions.js';
 
 /**
  * Sends an HTTP response with paginated data using cursor-based pagination.

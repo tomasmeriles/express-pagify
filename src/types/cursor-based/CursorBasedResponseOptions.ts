@@ -1,27 +1,11 @@
-import { type Response } from 'express';
+import type { BasicResponseOptions } from '../common/BasicResponseOptions.js';
 
 /**
  * Options for sending a cursor-based paginated response.
  *
  * @template T - Type of each item in the `data` array.
  */
-export type CursorBasedResponseOptions<T> = {
-  /**
-   * Express response object used to send the HTTP response.
-   */
-  res: Response;
-
-  /**
-   * Array of items for the current page.
-   */
-  data: T[];
-
-  /**
-   * HTTP status code to send with the response.
-   * @default 200
-   */
-  status?: number;
-
+export type CursorBasedResponseOptions<T> = BasicResponseOptions<T> & {
   /**
    * Cursor object for the next cursor. Can be any serializable object.
    * If there is no next cursor, this can be `null` or `undefined`.
@@ -44,9 +28,4 @@ export type CursorBasedResponseOptions<T> = {
    * Can be derived from `data.length` if not explicitly provided.
    */
   count: number;
-
-  /**
-   * Additional arbitrary properties to include in the response.
-   */
-  extra?: Record<string, any>;
 };

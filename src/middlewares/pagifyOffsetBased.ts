@@ -1,9 +1,9 @@
-import type { PagifyOffsetBasedConfig } from '../types/PagifyOffsetBasedConfig.js';
+import type { OffsetBasedConfig } from '../types/offset-based/OffsetBasedConfig.js';
 import type { Request, Response, NextFunction } from 'express';
-import { defaultValidatorFunction } from '../utils/defaultValidatorFunction.js';
 import { InvalidPaginationValuesError } from '../errors/InvalidPaginationValuesError.js';
 import { isString } from '../utils/typeguards/isString.js';
 import { DEFAULTS } from '../constants/defaults.js';
+import type { HttpMethod } from '../types/common/BasicMiddlewareConfig.js';
 
 /**
  * Middleware for handling offset-based pagination in Express.
@@ -38,37 +38,38 @@ import { DEFAULTS } from '../constants/defaults.js';
  *   fallBackValues: { defaultPageValue: 1, defaultPageSizeValue: 20 }
  * }));
  */
-export function pagifyOffsetBased(config?: Partial<PagifyOffsetBasedConfig>) {
+export function pagifyOffsetBased(config?: Partial<OffsetBasedConfig>) {
   // Merge user config with defaults to ensure all required fields are set.
-  const fullConfig: Required<PagifyOffsetBasedConfig> = {
+  const fullConfig: Required<OffsetBasedConfig> = {
     disablePagination: false,
     supportedHttpMethods: ['GET'],
     pagePropertyName: DEFAULTS.PAGE_PROPERTY_NAME,
     pageSizePropertyName: DEFAULTS.PAGE_SIZE_PROPERTY_NAME,
     invalidValuesMessage: DEFAULTS.INVALID_VALUES_MESSAGE,
-    validatorFunction: defaultValidatorFunction,
-    // TODO: Change this values to false when releasing 1.0
-    fallBackValues: {
-      defaultPageValue: 1,
-      defaultPageSizeValue: 10,
-    },
+    validatorFunction: () => true,
+    fallBackValues: false,
     ...config,
   };
 
-  // If pagination is disabled, return a middleware that just calls next().
+  // If pagination is disabled, return a middleware that just calls next() and sets pagination values to undefined.
   if (fullConfig.disablePagination) {
-    // TODO: Make this a utils function
-    return function (_req: Request, _res: Response, next: NextFunction) {
-      //TODO: Set req.pagination.page and pagesize = undefined when releasing 1.0
-      // TODO: Return this value when releasing 1.0
-      next();
+    return function (req: Request, _res: Response, next: NextFunction) {
+      if (req.pagination) {
+        req.pagination.page = req.pagination.page ?? undefined;
+        req.pagination.pageSize = req.pagination.pageSize ?? undefined;
+        req.pagination.skip = req.pagination.skip ?? undefined;
+        req.pagination.take = req.pagination.take ?? undefined;
+        req.pagination.fallbackValues = false;
+      }
+
+      return next();
     };
   }
 
   // Actual middleware function to handle pagination.
   return function (req: Request, res: Response, next: NextFunction) {
     // Only process pagination if the HTTP method is in the supported list.
-    if (!fullConfig.supportedHttpMethods.includes(req.method)) {
+    if (!fullConfig.supportedHttpMethods.includes(req.method as HttpMethod)) {
       return next();
     }
 
@@ -129,7 +130,6 @@ export function pagifyOffsetBased(config?: Partial<PagifyOffsetBasedConfig>) {
     };
 
     // Continue to the next middleware or route handler.
-    // TODO: Return this value when releasing 1.0
-    next();
+    return next();
   };
 }
