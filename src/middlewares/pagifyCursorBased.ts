@@ -46,7 +46,6 @@ export function pagifyCursorBased<T extends Record<string, any>>(
 ) {
   // Merge provided config with defaults, ensuring all fields are present
   const fullConfig: Required<CursorBasedConfig<T>> = {
-    disablePagination: false,
     supportedHttpMethods: ['GET'],
     cursorParamName: DEFAULTS.CURSOR_PARAM_NAME,
     lastPropertyName: 'last' as keyof T,
@@ -56,18 +55,6 @@ export function pagifyCursorBased<T extends Record<string, any>>(
     invalidValuesMessage: DEFAULTS.INVALID_VALUES_MESSAGE,
     ...config,
   };
-
-  // If pagination is disabled, return a middleware that just calls next() and sets pagination values to undefined.
-  if (fullConfig.disablePagination) {
-    return function (req: Request, _res: Response, next: NextFunction) {
-      if (req.pagination) {
-        req.pagination.cursor = undefined;
-        req.pagination.fallbackValues = false;
-      }
-
-      return next();
-    };
-  }
 
   // Actual middleware function to handle pagination.
   return function (req: Request, res: Response, next: NextFunction) {

@@ -9,12 +9,6 @@ export type HttpMethod =
 
 export type BasicMiddlewareConfig<T> = {
   /**
-   * Flag to completely disable pagination middleware functionality.
-   * When `true`, the middleware will do nothing and pass control immediately.
-   */
-  disablePagination: boolean;
-
-  /**
    * List of HTTP methods for which pagination should be processed.
    * For example: ['GET', 'POST']. Pagination is skipped on other methods.
    */

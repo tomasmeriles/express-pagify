@@ -13,7 +13,6 @@ import type { HttpMethod } from '../types/common/BasicMiddlewareConfig.js';
  * the `req` object for downstream handlers to use.
  *
  * - Supports default values through `fallBackValues` if invalid/missing.
- * - Can be disabled entirely via `disablePagination`.
  *
  * @param config - Optional configuration object to customize pagination behavior.
  *                 Any missing fields will be filled with default values.
@@ -41,7 +40,6 @@ import type { HttpMethod } from '../types/common/BasicMiddlewareConfig.js';
 export function pagifyOffsetBased(config?: Partial<OffsetBasedConfig>) {
   // Merge user config with defaults to ensure all required fields are set.
   const fullConfig: Required<OffsetBasedConfig> = {
-    disablePagination: false,
     supportedHttpMethods: ['GET'],
     pagePropertyName: DEFAULTS.PAGE_PROPERTY_NAME,
     pageSizePropertyName: DEFAULTS.PAGE_SIZE_PROPERTY_NAME,
@@ -50,21 +48,6 @@ export function pagifyOffsetBased(config?: Partial<OffsetBasedConfig>) {
     fallBackValues: false,
     ...config,
   };
-
-  // If pagination is disabled, return a middleware that just calls next() and sets pagination values to undefined.
-  if (fullConfig.disablePagination) {
-    return function (req: Request, _res: Response, next: NextFunction) {
-      if (req.pagination) {
-        req.pagination.page = req.pagination.page ?? undefined;
-        req.pagination.pageSize = req.pagination.pageSize ?? undefined;
-        req.pagination.skip = req.pagination.skip ?? undefined;
-        req.pagination.take = req.pagination.take ?? undefined;
-        req.pagination.fallbackValues = false;
-      }
-
-      return next();
-    };
-  }
 
   // Actual middleware function to handle pagination.
   return function (req: Request, res: Response, next: NextFunction) {
