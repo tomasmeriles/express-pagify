@@ -18,21 +18,24 @@ export type OffsetBasedConfig = BasicMiddlewareConfig<FallBackOffsetValues> & {
    * Name of the query parameter to read the page number from.
    * Defaults to something like 'page'.
    */
-  pagePropertyName: string;
+  pageParamName: string;
 
   /**
    * Name of the query parameter to read the page size (items per page) from.
    * Defaults to something like 'pageSize'.
    */
-  pageSizePropertyName: string;
+  pageSizeParamName: string;
 
   /**
    * Validator function to verify that parsed page and page size values
    * are valid according to custom rules.
    * Should return `true` if values are valid, or `false` otherwise.
    *
-   * @param page Parsed page number.
-   * @param pageSize Parsed page size (items per page).
+   * @param page Parsed page number or undefined.
+   * @param pageSize Parsed page size (items per page) or undefined.
    */
-  validatorFunction: (page: number, pageSize: number) => boolean;
+  validatorFunction: (
+    page: number | undefined,
+    pageSize: number | undefined
+  ) => boolean;
 };

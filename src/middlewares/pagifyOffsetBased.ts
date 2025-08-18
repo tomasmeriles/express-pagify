@@ -41,8 +41,8 @@ export function pagifyOffsetBased(config?: Partial<OffsetBasedConfig>) {
   // Merge user config with defaults to ensure all required fields are set.
   const fullConfig: Required<OffsetBasedConfig> = {
     supportedHttpMethods: ['GET'],
-    pagePropertyName: DEFAULTS.PAGE_PROPERTY_NAME,
-    pageSizePropertyName: DEFAULTS.PAGE_SIZE_PROPERTY_NAME,
+    pageParamName: DEFAULTS.PAGE_PROPERTY_NAME,
+    pageSizeParamName: DEFAULTS.PAGE_SIZE_PROPERTY_NAME,
     invalidValuesMessage: DEFAULTS.INVALID_VALUES_MESSAGE,
     validatorFunction: () => true,
     fallBackValues: false,
@@ -57,8 +57,8 @@ export function pagifyOffsetBased(config?: Partial<OffsetBasedConfig>) {
     }
 
     // Extract raw page and pageSize values from query string.
-    const pageRaw = req.query[fullConfig.pagePropertyName];
-    const pageSizeRaw = req.query[fullConfig.pageSizePropertyName];
+    const pageRaw = req.query[fullConfig.pageParamName];
+    const pageSizeRaw = req.query[fullConfig.pageSizeParamName];
 
     let parsedPage: number | undefined = undefined;
     let parsedPageSize: number | undefined = undefined;
@@ -76,10 +76,10 @@ export function pagifyOffsetBased(config?: Partial<OffsetBasedConfig>) {
     }
 
     // Validate the parsed values with the provided validator function.
-    const validValues =
-      parsedPage !== undefined && parsedPageSize !== undefined
-        ? fullConfig.validatorFunction(parsedPage, parsedPageSize)
-        : false;
+    const validValues = fullConfig.validatorFunction(
+      parsedPage,
+      parsedPageSize
+    );
 
     // If invalid values and no fallbacks configured, throw an error.
     let fallbackValues = false;
