@@ -76,10 +76,10 @@ export function pagifyOffsetBased(config?: Partial<OffsetBasedConfig>) {
     }
 
     // Validate the parsed values with the provided validator function.
-    const validValues = fullConfig.validatorFunction(
-      parsedPage,
-      parsedPageSize
-    );
+    const validValues =
+      parsedPage !== undefined && parsedPageSize !== undefined
+        ? fullConfig.validatorFunction(parsedPage, parsedPageSize)
+        : false;
 
     // If invalid values and no fallbacks configured, throw an error.
     let fallbackValues = false;
