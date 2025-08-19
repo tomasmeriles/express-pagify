@@ -36,8 +36,6 @@ export type {
 
 export { offsetBasedResponse } from './responses/offsetBasedResponse.js';
 export type { OffsetBasedResponseOptions } from './types/offset-based/OffsetBasedResponseOptions.js';
-export type { OffsetBasedResponse } from './types/offset-based/OffsetBasedResponse.js';
 
 export { cursorBasedResponse } from './responses/cursorBasedResponse.js';
 export type { CursorBasedResponseOptions } from './types/cursor-based/CursorBasedResponseOptions.js';
-export type { CursorBasedResponse } from './types/cursor-based/CursorBasedResponse.js';
