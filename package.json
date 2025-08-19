@@ -1,0 +1,38 @@
+{
+  "name": "express-pagify",
+  "version": "1.0.0",
+  "description": "A simple and flexible Express middleware for API pagination",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomasmeriles/express-pagify.git"
+  },
+  "keywords": [
+    "express",
+    "pagination",
+    "middleware",
+    "api",
+    "typescript"
+  ],
+  "files": [
+    "dist"
+  ],
+  "author": "Tomas Meriles",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tomasmeriles/express-pagify/issues"
+  },
+  "homepage": "https://github.com/tomasmeriles/express-pagify#readme",
+  "peerDependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.2.1"
+  }
+}
